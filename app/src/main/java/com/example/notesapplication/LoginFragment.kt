@@ -13,7 +13,9 @@ import com.example.notesapplication.databinding.FragmentLoginBinding
 import com.example.notesapplication.databinding.FragmentRegisterBinding
 import com.example.notesapplication.models.UserRequest
 import com.example.notesapplication.utils.NetworkResult
+import com.example.notesapplication.utils.TokenManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -21,6 +23,8 @@ class LoginFragment : Fragment() {
     private var _binding : FragmentLoginBinding? = null
     private val binding  get() = _binding!!
     private val authViewModel by viewModels<AuthViewModel>()
+    @Inject
+    lateinit var tokenManager: TokenManager
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,6 +70,7 @@ class LoginFragment : Fragment() {
             when (it) {
                 is NetworkResult.Success -> {
                     // TODO token work left
+                    tokenManager.saveToken(it.data!!.token)
                     findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
                 }
 
